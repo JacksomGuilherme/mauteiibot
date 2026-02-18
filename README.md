@@ -2,7 +2,7 @@
 
 Bot de chat para Twitch desenvolvido em Node.js com foco em automações de stream, comandos customizados e integração completa com a API oficial da Twitch.
 
-O objetivo do projeto é evoluir é ter um bot totalmente customizável e self-hosted.
+O objetivo do projeto é ter um bot totalmente customizável e self-hosted.
 
 ---
 
