@@ -6,7 +6,13 @@ O objetivo do projeto é ter um bot totalmente customizável e self-hosted.
 
 ---
 
-## ✨ Features atuais
+## Comandos atuais
+
+- /clip `[titulo]` - 🎬 Criação de clips via API
+
+---
+
+## Features atuais
 
 - 💬 Conexão ao chat via IRC (tmi.js)
 - 🧠 Sistema modular de comandos (1 arquivo por comando)
@@ -14,7 +20,7 @@ O objetivo do projeto é ter um bot totalmente customizável e self-hosted.
 
 ---
 
-## 🧰 Tecnologias
+## Tecnologias
 
 - Node.js (v24+)
 - tmi.js
@@ -25,6 +31,3 @@ O objetivo do projeto é ter um bot totalmente customizável e self-hosted.
 
 ---
 
-## ⚡ Comandos atuais
-
-- /clip `[titulo]` - 🎬 Criação de clips via API
