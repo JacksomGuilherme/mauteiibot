@@ -1,0 +1,19 @@
+{
+  "name": "mauteii_bot",
+  "version": "1.0.0",
+  "description": "Bot da twitch para comandos novos e totalmente personalizáveis",
+  "main": "bot.js",
+  "scripts": {
+    "dev": "nodemon bot.js",
+    "start": "node bot.js",
+    "test": "test"
+  },
+  "author": "Jacksom Guilherme Novack dos Santos",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.5",
+    "dotenv": "^17.3.1",
+    "nodemon": "^3.1.11",
+    "tmi.js": "^1.8.5"
+  }
+}
