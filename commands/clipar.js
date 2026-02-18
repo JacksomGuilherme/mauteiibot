@@ -27,7 +27,9 @@ module.exports = {
             )
             let clip = await response.data.data[0]
 
-            sendMessage(channel, `Clipe ${fullArgs} criado\n\n${clip.edit_url}`)
+            let url = `https://clips.twitch.tv/${clip.id}`
+
+            sendMessage(channel, `Clipe ${fullArgs} criado\n\n${url}`)
         } catch (error) {
             if (error.status === 404) {
                 sendMessage(channel, `Não é possível clipar um canal offline`)
