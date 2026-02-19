@@ -7,7 +7,11 @@ db.exec(`CREATE TABLE IF NOT EXISTS auth (
     expires_at DATE
 ) `);
 
+db.exec('DROP TABLE broadcast')
+db.exec(`CREATE TABLE IF NOT EXISTS broadcast (
+    channel_name TEXT PRIMARY KEY, 
+    broadcast_id INTEGER
+) `);
 
-db.exec("SELECT * FROM auth")
 
 module.exports = { db }
