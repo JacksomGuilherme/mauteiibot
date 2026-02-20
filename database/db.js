@@ -8,6 +8,10 @@ db.exec(`CREATE TABLE IF NOT EXISTS auth (
 ) `);
 
 
-db.exec("SELECT * FROM auth")
+db.exec(`CREATE TABLE IF NOT EXISTS broadcast (
+    channel_name TEXT PRIMARY KEY, 
+    broadcast_id INTEGER
+) `);
+
 
 module.exports = { db }
