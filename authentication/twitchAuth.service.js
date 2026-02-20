@@ -52,6 +52,34 @@ async function getValidAccessToken() {
     return await refreshAccessToken(tokens.refresh_token)
 }
 
+async function exchangeCodeForToken(code) {
+    const response = await axios.post(
+        'https://id.twitch.tv/oauth2/token',
+        null,
+        {
+            params: {
+                client_id: process.env.TWITCH_CLIENT_ID,
+                client_secret: process.env.TWITCH_CLIENT_SECRET,
+                code: code,
+                grant_type: 'authorization_code',
+                redirect_uri: 'http://localhost'
+            }
+        }
+    )
+
+    const data = response.data
+    const expiresAt = Date.now() + (data.expires_in * 1000)
+
+    authRepo.saveTokens(
+        data.access_token,
+        data.refresh_token,
+        expiresAt
+    )
+
+    console.log('✅ Tokens salvos no banco!')
+}
+
 module.exports = {
+    exchangeCodeForToken,
     getValidAccessToken
 }
