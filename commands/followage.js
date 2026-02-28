@@ -30,13 +30,34 @@ function getFollowDuration(followedAt) {
         years--
     }
 
-    let message = 'está seguindo há'
-    message += (years != 1 ? ` ${years} anos` : ` ${years} ano`) + ','
-    message += (months != 1 ? ` ${months} meses` : ` ${months} mês`) + ','
-    message += (days != 1 ? ` ${days} dias` : ` ${days} dia`) + ' e'
-    message += (hours != 1 ? ` ${hours} horas` : ` ${hours} hora`)
+    const parts = []
 
-    return message
+    if (years > 0) {
+        parts.push(`${years} ${years === 1 ? 'ano' : 'anos'}`)
+    }
+
+    if (months > 0) {
+        parts.push(`${months} ${months === 1 ? 'mês' : 'meses'}`)
+    }
+
+    if (days > 0) {
+        parts.push(`${days} ${days === 1 ? 'dia' : 'dias'}`)
+    }
+
+    if (hours > 0) {
+        parts.push(`${hours} ${hours === 1 ? 'hora' : 'horas'}`)
+    }
+
+    if (parts.length === 0) {
+        return 'começou a seguir agora mesmo 👀'
+    }
+
+    if (parts.length === 1) {
+        return `está seguindo há ${parts[0]}`
+    }
+
+    const last = parts.pop()
+    return `está seguindo há ${parts.join(', ')} e ${last}`
 }
 
 module.exports = {
