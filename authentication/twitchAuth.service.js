@@ -1,6 +1,4 @@
 const axios = require('axios')
-require('dotenv').config()
-
 const authRepo = require('../repositories/auth.repository')
 
 async function refreshAccessToken(refreshToken) {

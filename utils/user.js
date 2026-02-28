@@ -1,7 +1,5 @@
-require('dotenv').config()
 const axios = require('axios')
 const { getValidAccessToken } = require('../authentication/twitchAuth.service')
-const { getBroadcast, saveBroadcast } = require('../repositories/broadcast.repository')
 
 module.exports = {
     async getUserByName(username) {

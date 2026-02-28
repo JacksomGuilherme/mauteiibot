@@ -1,4 +1,3 @@
-require('dotenv').config()
 const axios = require('axios')
 const { getValidAccessToken } = require('../authentication/twitchAuth.service')
 const { getBroadcasterId } = require('./broadcast')

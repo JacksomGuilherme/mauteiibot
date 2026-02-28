@@ -1,4 +1,3 @@
-require('dotenv').config()
 const axios = require('axios')
 const { sendMessage } = require('../utils/messages')
 const { getValidAccessToken } = require('../authentication/twitchAuth.service')
