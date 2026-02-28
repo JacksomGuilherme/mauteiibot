@@ -20,17 +20,22 @@ function sanitizeArgs(args) {
         .map(a =>
             a
                 .normalize("NFKC")                // normaliza unicode
-                .replace(/[\u0300-\u036F]/g, "") 
+                .replace(/[\u0300-\u036F]/g, "")
                 .trim()
         )
         .filter(a => a.length > 0)
 }
 
-async function startBot() {
+let client
+
+async function createClient() {
     const accessToken = await getValidAccessToken()
 
-    const client = new tmi.Client({
-        options: { debug: true },
+    client = new tmi.Client({
+        options: { 
+            debug: true,
+            messagesLogLevel: 'info'
+        },
         identity: {
             username: "mauteiibot",
             password: `oauth:${accessToken}`
@@ -39,6 +44,18 @@ async function startBot() {
     })
 
     await client.connect()
+}
+
+async function reconnectBot() {
+    console.log('🔄 Reconnecting bot with new token...')
+    if (client) {
+        await client.disconnect()
+    }
+    await createClient()
+}
+
+async function startBot() {
+    await createClient()
 
     client.on('message', async (channel, tags, message, self) => {
         if (self) return
@@ -60,6 +77,12 @@ async function startBot() {
         } catch (err) {
             console.error(err)
         }
+    })
+
+    client.on('disconnected', async (reason) => {
+        console.log('Bot disconnected:', reason)
+
+        await reconnectBot()
     })
 }
 
