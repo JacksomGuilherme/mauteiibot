@@ -33,8 +33,7 @@ async function createClient() {
 
     client = new tmi.Client({
         options: { 
-            debug: true,
-            messagesLogLevel: 'info'
+            debug: false
         },
         identity: {
             username: "mauteiibot",
