@@ -47,9 +47,7 @@ async function createClient() {
 
 async function reconnectBot() {
     console.log('🔄 Reconnecting bot with new token...')
-    if (client) {
-        await client.disconnect()
-    }
+
     await createClient()
 }
 
