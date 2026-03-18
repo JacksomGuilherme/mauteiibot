@@ -31,10 +31,8 @@ let client
 async function createClient() {
     const accessToken = await getValidAccessToken()
 
-    client = new tmi.Client({
-        options: { 
-            debug: false
-        },
+    const newClient = new tmi.Client({
+        options: { debug: false },
         identity: {
             username: "mauteiibot",
             password: `oauth:${accessToken}`
@@ -42,19 +40,7 @@ async function createClient() {
         channels: ['mauteii']
     })
 
-    await client.connect()
-}
-
-async function reconnectBot() {
-    console.log('🔄 Reconnecting bot with new token...')
-
-    await createClient()
-}
-
-async function startBot() {
-    await createClient()
-
-    client.on('message', async (channel, tags, message, self) => {
+    newClient.on('message', async (channel, tags, message, self) => {
         if (self) return
 
         const parsed = parseCommand(message)
@@ -65,7 +51,7 @@ async function startBot() {
 
         try {
             await command.execute({
-                client,
+                client: newClient,
                 channel: channel.replace('#', ''),
                 tags,
                 args: parsed.args,
@@ -76,11 +62,44 @@ async function startBot() {
         }
     })
 
-    client.on('disconnected', async (reason) => {
+    newClient.on('disconnected', async (reason) => {
         console.log('Bot disconnected:', reason)
-
         await reconnectBot()
     })
+
+    await newClient.connect()
+    console.log('☑️ Bot connected')
+
+    return newClient
+}
+
+let isReconnecting = false
+
+async function reconnectBot() {
+    if (isReconnecting) return
+    
+    isReconnecting = true
+
+    console.log('🔄 Reconnecting bot with new token...')
+
+    try {
+        if (client) await client.disconnect()
+    } catch {}
+
+    try {
+        client = await createClient()
+    } finally {
+        isReconnecting = false
+    }
+}
+
+async function startBot() {
+    client = await createClient()
 }
 
 startBot()
+
+setInterval(() => {
+    console.log("🔥 TESTANDO RECONNECT FORÇADO")
+    reconnectBot()
+}, 5000)
