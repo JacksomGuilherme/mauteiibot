@@ -98,8 +98,3 @@ async function startBot() {
 }
 
 startBot()
-
-setInterval(() => {
-    console.log("🔥 TESTANDO RECONNECT FORÇADO")
-    reconnectBot()
-}, 5000)
