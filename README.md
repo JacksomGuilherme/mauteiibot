@@ -8,7 +8,16 @@ O objetivo do projeto é ter um bot totalmente customizável e self-hosted.
 
 ## Comandos atuais
 
-- /clip `[titulo]` - 🎬 Criação de clips via API
+- !clip `[duração] [titulo]` - 🎬 Criação de clips via API
+- !followage `[usuário]` - Mostra o tempo que o usuário segue o canal
+- !videonovo - Envia no chat o video mais rescente do canal do youtube
+- !comandos - Envia no chat o link para a página com a lista de comandos do bot
+
+---
+
+## 🌐 Acesse a página de comandos
+
+👉 https://jacksomguilherme.github.io/mauteiibot/
 
 ---
 
