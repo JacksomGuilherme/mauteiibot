@@ -61,6 +61,13 @@ function getFollowDuration(followedAt) {
 
 module.exports = {
     name: 'followage',
+    description: 'Mostra o tempo que você segue o canal ou o tempo que a pessoa que você marcar segue o canal',
+    aliases: [],
+    args: [
+        { "name": "Usuário", "examples": ["@Mauteiibot"], "required": false },
+    ],
+    examples: ["!followage", "!followage @Mauteiibot"],
+    docignore: false,
     execute: async ({ client, channel, tags, args, fullArgs }) => {
         const broadcasterId = await getBroadcasterId(channel)
         const usarTagId = parseInt(tags['user-id'])

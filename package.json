@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon bot.js",
     "start": "node bot.js",
-    "test": "test"
+    "test": "test",
+    "build-docs": "node build.js"
   },
   "author": "Jacksom Guilherme Novack dos Santos",
   "license": "ISC",

@@ -5,6 +5,11 @@ const xml2js = require("xml2js")
 
 module.exports = {
     name: 'videonovo',
+    description: 'Envia no chat o link do video mais rescente do canal do Mauteii',
+    aliases: [],
+    args: [],
+    examples: ["!videonovo"],
+    docignore: false,
     execute: async ({ client, channel, tags, args, fullArgs }) => {
         const response = await axios.get("https://www.youtube.com/feeds/videos.xml?channel_id=UCSRVVnOhNV4K9kqTDxBOOyw")
 

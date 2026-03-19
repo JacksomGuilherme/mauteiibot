@@ -1,0 +1,59 @@
+[
+  {
+    "name": "clip",
+    "description": "Cria clipes automaticamente, o comando aceita o tempo de duração (5s - 60s) e o nome do clipe",
+    "aliases": [
+      "clipar",
+      "clipe"
+    ],
+    "arguments": [
+      {
+        "name": "Duração",
+        "examples": [
+          "30s",
+          "45s",
+          "60s"
+        ],
+        "required": false
+      },
+      {
+        "name": "Nome do Clipe",
+        "examples": [
+          "Dicção do mautei falhando"
+        ],
+        "required": false
+      }
+    ],
+    "examples": [
+      "!clipe 60s 1 minuto de jogadas insantas",
+      "!clipe momento mais engraçado da live"
+    ]
+  },
+  {
+    "name": "followage",
+    "description": "Mostra o tempo que você segue o canal ou o tempo que a pessoa que você marcar segue o canal",
+    "aliases": [],
+    "arguments": [
+      {
+        "name": "Usuário",
+        "examples": [
+          "@Mauteiibot"
+        ],
+        "required": false
+      }
+    ],
+    "examples": [
+      "!followage",
+      "!followage @Mauteiibot"
+    ]
+  },
+  {
+    "name": "videonovo",
+    "description": "Envia no chat o link do video mais rescente do canal do Mauteii",
+    "aliases": [],
+    "arguments": [],
+    "examples": [
+      "!videonovo"
+    ]
+  }
+]

@@ -26,7 +26,14 @@ function parseClipArgs(args) {
 
 module.exports = {
     name: 'clip',
+    description: 'Cria clipes automaticamente, o comando aceita o tempo de duração (5s - 60s) e o nome do clipe',
     aliases: ['clipar', 'clipe'],
+    args: [
+        {"name": "Duração", "examples": ["30s", "45s", "60s"], "required": false},
+        {"name": "Nome do Clipe", "examples": ["Dicção do mautei falhando"], "required": false},
+    ],
+    examples: ["!clipe 60s 1 minuto de jogadas insantas", "!clipe momento mais engraçado da live"],
+    docignore: false,
     execute: async ({ client, channel, tags, args, fullArgs }) => {
         const accessToken = await getValidAccessToken()
         const broadcasterId = await getBroadcasterId(channel)

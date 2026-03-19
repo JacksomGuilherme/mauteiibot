@@ -5,6 +5,7 @@ const { getBroadcasterId } = require('../utils/broadcast')
 
 module.exports = {
     name: 'token',
+    docignore: true,
     execute: async ({ client, channel, tags, args, fullArgs }) => {
         const broadcasterId = await getBroadcasterId(channel)
         const usarTagId = parseInt(tags['user-id'])
