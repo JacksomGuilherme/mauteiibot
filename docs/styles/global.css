@@ -12,9 +12,12 @@
 }
 
 body.dark {
-  --bg: #1f1f23;         /* menos preto */
-  --card: #2a2a2e;       /* cinza suave */
-  --text: #e4e4e7;       /* branco mais confortável */
+  --bg: #1f1f23;
+  /* menos preto */
+  --card: #2a2a2e;
+  /* cinza suave */
+  --text: #e4e4e7;
+  /* branco mais confortável */
   --border: #3a3a3f;
   --tag: #3a3a3f;
   --example: #323238;
@@ -172,6 +175,55 @@ h1 {
   background: var(--table-row-alt);
 }
 
+.args-table .arg-example {
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+/* container geral */
+.args-container {
+  margin-top: 8px;
+}
+
+/* cada argumento */
+.arg-item {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background: var(--card);
+}
+
+/* nome */
+.arg-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* obrigatório */
+.arg-meta {
+  font-size: 12px;
+  margin-top: 3px;
+  color: var(--text);
+  opacity: 0.8;
+}
+
+/* exemplos */
+.arg-examples {
+  margin-top: 6px;
+}
+
+/* tags de exemplo */
+.arg-example {
+  display: inline-block;
+  background: var(--tag);
+  padding: 4px 8px;
+  margin: 3px 4px 0 0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+}
+
 .theme-toggle {
   margin-left: auto;
   background: var(--tag);
@@ -213,45 +265,17 @@ h1 {
     padding: 12px;
   }
 
-  /* tabela vira bloco */
-  .args-table thead {
+  .args-table {
     display: none;
   }
+}
 
-  .args-table,
-  .args-table tbody,
-  .args-table tr,
-  .args-table td {
-    display: block;
-    width: 100%;
+@media (min-width: 601px) {
+  .args-table {
+    display: table;
   }
 
-  .args-table tr {
-    margin-bottom: 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px;
-  }
-
-  .args-table td {
-    border: none;
-    padding: 4px 0;
-  }
-
-  .args-table td::before {
-    font-weight: bold;
-    display: block;
-  }
-
-  .args-table td:nth-child(1)::before {
-    content: "Nome";
-  }
-
-  .args-table td:nth-child(2)::before {
-    content: "Obrigatório";
-  }
-
-  .args-table td:nth-child(3)::before {
-    content: "Como preencher";
+  .args-container {
+    display: none;
   }
 }

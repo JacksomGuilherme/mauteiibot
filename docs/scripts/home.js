@@ -34,12 +34,14 @@ function renderCommands(commands) {
   ${cmd.arguments.length ? `
     <div class="section">
       <strong>Como usar os parâmetros:</strong>
+
+      <!-- 🖥️ TABELA (desktop) -->
       <table class="args-table">
         <thead>
           <tr>
             <th>Nome</th>
             <th>Obrigatório</th>
-            <th>Exemplo</th>
+            <th>Como preencher</th>
           </tr>
         </thead>
         <tbody>
@@ -49,14 +51,35 @@ function renderCommands(commands) {
               <td>${arg.required ? 'Sim' : 'Não'}</td>
               <td>
                 ${arg.examples && arg.examples.length
-                  ? arg.examples.map(ex => `<div class="arg-example">${ex}</div>`).join('')
-                  : '-'
-                }
+          ? arg.examples.map(ex => `<span class="arg-example">${ex}</span>`).join('')
+          : '-'
+        }
               </td>
             </tr>
           `).join('')}
         </tbody>
       </table>
+
+      <!-- 📱 MOBILE -->
+      <div class="args-container">
+        ${cmd.arguments.map(arg => `
+          <div class="arg-item">
+            <div class="arg-name">${arg.name}</div>
+
+            <div class="arg-meta">
+              Obrigatório: <strong>${arg.required ? 'Sim' : 'Não'}</strong>
+            </div>
+
+            ${arg.examples && arg.examples.length
+            ? `<div class="arg-examples">
+                    ${arg.examples.map(ex => `<span class="arg-example">${ex}</span>`).join('')}
+                  </div>`
+            : ''
+          }
+          </div>
+        `).join('')}
+      </div>
+
     </div>
   ` : ''}
 
