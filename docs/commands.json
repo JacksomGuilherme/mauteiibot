@@ -30,6 +30,18 @@
     ]
   },
   {
+    "name": "comandos",
+    "description": "Envia no chat o link da página com os meus comandos",
+    "aliases": [
+      "commands",
+      "comms"
+    ],
+    "arguments": [],
+    "examples": [
+      "!comandos"
+    ]
+  },
+  {
     "name": "followage",
     "description": "Mostra o tempo que você segue o canal ou o tempo que a pessoa que você marcar segue o canal",
     "aliases": [],
