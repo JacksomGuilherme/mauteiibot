@@ -113,8 +113,8 @@ function addCopyExampleEventHandler() {
         document.execCommand('copy')
         document.body.removeChild(textarea)
 
-        showToast("Exemplo copiado!", 2) 
       }
+      showToast("Exemplo copiado!", 2) 
     })
   })
 }
