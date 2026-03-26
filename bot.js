@@ -67,8 +67,11 @@ async function createClient() {
         await reconnectBot()
     })
 
-    await newClient.connect()
-    console.log('☑️ Bot connected')
+    await newClient.connect().then(res => {
+        if (res) {
+            console.log('☑️ Bot connected')
+        }
+    })
 
     return newClient
 }
@@ -77,19 +80,45 @@ let isReconnecting = false
 
 async function reconnectBot() {
     if (isReconnecting) return
-    
+
     isReconnecting = true
 
     console.log('🔄 Reconnecting bot with new token...')
 
     try {
-        if (client) await client.disconnect()
-    } catch {}
+        await safeDisconnect(client)
 
-    try {
+        await new Promise(res => setTimeout(res, 2000))
+
         client = await createClient()
+
+    } catch (err) {
+        console.error('Erro no reconnect:', err)
+
+        await new Promise(res => setTimeout(res, 5000))
     } finally {
         isReconnecting = false
+    }
+}
+
+async function safeDisconnect(client) {
+    if (!client) return
+
+    try {
+        const ws = client.ws
+
+        if (!ws) return
+
+        const state = ws.readyState
+
+        if (state === 0 || state === 1) {
+            await client.disconnect()
+        } else {
+            console.log('⚠️ Socket already closing/closed')
+        }
+
+    } catch (err) {
+        console.log('Disconnection error:', err)
     }
 }
 

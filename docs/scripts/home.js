@@ -5,11 +5,14 @@ fetch('commands.json')
   .then(data => {
     allCommands = data
     renderCommands(data)
+    addCopyExampleEventHandler()
   })
 
 function renderCommands(commands) {
   const container = document.getElementById('commands')
   container.innerHTML = ''
+
+  const screenWidth = window.screen.width
 
   commands.forEach(cmd => {
     const div = document.createElement('div')
@@ -35,50 +38,48 @@ function renderCommands(commands) {
     <div class="section">
       <strong>Como usar os parâmetros:</strong>
 
-      <!-- 🖥️ TABELA (desktop) -->
-      <table class="args-table">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Obrigatório</th>
-            <th>Como preencher</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${cmd.arguments.map(arg => `
+        <table class="args-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Obrigatório</th>
+              <th>Como preencher</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${cmd.arguments.map(arg => `
             <tr>
               <td>${arg.name}</td>
               <td>${arg.required ? 'Sim' : 'Não'}</td>
               <td>
                 ${arg.examples && arg.examples.length
-          ? arg.examples.map(ex => `<span class="arg-example">${ex}</span>`).join('')
-          : '-'
-        }
+        ? arg.examples.map(ex => `<span class="arg-example">${ex}</span>`).join('')
+        : '-'
+      }
               </td>
             </tr>
           `).join('')}
-        </tbody>
-      </table>
+          </tbody>
+        </table> 
 
-      <!-- 📱 MOBILE -->
-      <div class="args-container">
-        ${cmd.arguments.map(arg => `
-          <div class="arg-item">
-            <div class="arg-name">${arg.name}</div>
+        <div class="args-container">
+          ${cmd.arguments.map(arg => `
+            <div class="arg-item">
+              <div class="arg-name">${arg.name}</div>
 
-            <div class="arg-meta">
-              Obrigatório: <strong>${arg.required ? 'Sim' : 'Não'}</strong>
+              <div class="arg-meta">
+                Obrigatório: <strong>${arg.required ? 'Sim' : 'Não'}</strong>
+              </div>
+
+              ${arg.examples && arg.examples.length
+          ? `<div class="arg-examples">
+                      ${arg.examples.map(ex => `<span class="arg-example">${ex}</span>`).join('')}
+                    </div>`
+          : ''
+        }
             </div>
-
-            ${arg.examples && arg.examples.length
-            ? `<div class="arg-examples">
-                    ${arg.examples.map(ex => `<span class="arg-example">${ex}</span>`).join('')}
-                  </div>`
-            : ''
-          }
-          </div>
-        `).join('')}
-      </div>
+          `).join('')}
+        </div>
 
     </div>
   ` : ''}
@@ -86,13 +87,52 @@ function renderCommands(commands) {
   ${cmd.examples.length ? `
     <div class="section">
       <strong>Exemplos de uso:</strong>
-      ${cmd.examples.map(ex => `<div class="example">${ex}</div>`).join('')}
+      ${cmd.examples.map((ex, key) => `<div id="${key}-${cmd.name}-ex" class="example">${ex}</div>`).join('')}
     </div>
   ` : ''}
 `;
 
     container.appendChild(div)
   })
+}
+
+function addCopyExampleEventHandler() {
+  document.querySelectorAll('div[id*=ex]').forEach(element => {
+    const text = element.innerText
+
+    element.addEventListener('click', async () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text)
+      } else {
+        // fallback raiz
+        const textarea = document.createElement('textarea')
+        textarea.value = text
+        document.body.appendChild(textarea)
+        textarea.select()
+        textarea.setSelectionRange(0, 99999)
+        document.execCommand('copy')
+        document.body.removeChild(textarea)
+
+      }
+      showToast("Exemplo copiado!", 2) 
+    })
+  })
+}
+
+function showToast(message, duration) {
+  const toast = document.getElementById('toast-copy')
+  toast.innerText = message
+  toast.classList.add('show')
+
+  setTimeout(() => {
+    toast.classList.remove('show')
+  }, duration * 1000)
+}
+
+async function copyToClipBoart(text) {
+  console.log(text)
+  console.log(navigator)
+  await navigator.clipboard.writeText(text)
 }
 
 document.getElementById('search').addEventListener('input', (e) => {

@@ -9,6 +9,8 @@
   --input-border: #ccc;
   --table-header: #f0f2f5;
   --table-row-alt: #fafafa;
+  --toast-bg: rgba(0, 0, 0, 0.678);
+  --toast-font-color: white;
 }
 
 body.dark {
@@ -25,6 +27,8 @@ body.dark {
   --input-border: #444;
   --table-header: #323238;
   --table-row-alt: #2f2f34;
+  --toast-bg: rgba(255, 255, 255, 0.678);
+  --toast-font-color: black
 }
 
 body {
@@ -133,6 +137,7 @@ h1 {
   margin-top: 5px;
   font-family: monospace;
   font-size: 12px;
+  cursor: pointer;
 }
 
 /* ALIASES */
@@ -245,6 +250,28 @@ h1 {
 
 .theme-toggle:active {
   transform: scale(0.95);
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: var(--toast-bg);
+  color: var(--toast-font-color);
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
 }
 
 /* MOBILE */
