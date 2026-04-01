@@ -15,8 +15,14 @@ module.exports = {
         const parser = new xml2js.Parser()
         const json = await parser.parseStringPromise(response.data)
 
-        const title = json.feed.entry[0].title[0]
-        const link = json.feed.entry[0].link[0]['$'].href
+        const videoValido = json.feed.entry.find(v => {
+            const link = v.link[0]['$'].href
+            return !link.includes("shorts")
+        })
+
+        const title = videoValido.title[0]
+        const link = videoValido.link[0]['$'].href
+        
         sendMessage(channel, `Assista ao vídeo novo no canal do Mauteii:\n\n${title}\n${link}`)
     }
 }
