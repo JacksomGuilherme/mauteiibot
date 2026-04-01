@@ -1,7 +1,4 @@
-require('dotenv').config()
-const axios = require('axios')
 const { sendMessage } = require('../utils/messages')
-const xml2js = require("xml2js")
 
 module.exports = {
     name: 'comandos',

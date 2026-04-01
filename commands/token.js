@@ -1,4 +1,3 @@
-const axios = require('axios')
 const { sendMessage } = require('../utils/messages')
 const { exchangeCodeForToken } = require('../authentication/twitchAuth.service')
 const { getBroadcasterId } = require('../utils/broadcast')
