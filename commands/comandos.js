@@ -10,6 +10,6 @@ module.exports = {
     docignore: false,
     execute: async (params, { userDisplayName ,say }) => {
         let urlComandos = "https://jacksomguilherme.github.io/mauteiibot/"
-        say(`@${userDisplayName} -> A lista dos meus comandos está aqui \n${urlComandos}`)
+        say(`@${userDisplayName} -> A lista dos meus comandos está aqui ${urlComandos}`)
     }
 }

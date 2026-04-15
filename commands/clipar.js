@@ -60,14 +60,14 @@ module.exports = {
 
             let clip = await response.data.data[0]
             if (!clip?.id) {
-                say(channel, 'Não foi possível criar o clipe, tente novamente.')
+                say('Não foi possível criar o clipe, tente novamente.')
             }
 
             let url = `https://clips.twitch.tv/${clip.id}`
 
             let returnMessage = (title && title != '') ? `"${title}" ` : ""
 
-            say(`Clipe ${returnMessage}criado:\n\n${url}`)
+            say(`Clipe ${returnMessage}criado: ${url}`)
         } catch (error) {
             const status = error.response?.status
 
