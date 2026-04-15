@@ -9,7 +9,7 @@ module.exports = {
     args: [],
     examples: ["!videonovo"],
     docignore: false,
-    execute: async ({ client, channel, tags, args, fullArgs }) => {
+    execute: async (params, { say }) => {
         const response = await axios.get("https://www.youtube.com/feeds/videos.xml?channel_id=UCSRVVnOhNV4K9kqTDxBOOyw")
 
         const parser = new xml2js.Parser()
@@ -23,6 +23,6 @@ module.exports = {
         const title = videoValido.title[0]
         const link = videoValido.link[0]['$'].href
         
-        sendMessage(channel, `Assista ao vídeo novo no canal do Mauteii:\n\n${title}\n${link}`)
+        say(`Assista ao vídeo novo no canal do Mauteii: ${title} ${link}`)
     }
 }

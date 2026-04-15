@@ -1,27 +1,30 @@
-require('dotenv').config()
-const { loadCommands } = require('./utils/handler')
-const { start } = require('./utils/connectionManager.js')
+import { RefreshingAuthProvider } from '@twurple/auth'
+import { Bot, BotCommand, createBotCommand } from '@twurple/easy-bot'
+import { EventSubWsListener } from '@twurple/eventsub-ws'
+import { getAuthProvider } from './authentication/twitchAuth.service.js'
+import { loadCommands } from './utils/commands.js'
 
+import dotenv from 'dotenv'
+dotenv.config()
+
+const authProvider = await getAuthProvider()
 const commands = loadCommands()
 
-function parseCommand(message) {
-    if (!message.startsWith('!')) return null
+const bot = new Bot({
+	authProvider,
+	chatClientOptions: {
+		rejoinChannelsOnReconnect: true
+	},
+	channels: ['mauteii'],
+	commands
+})
 
-    const args = message.slice(1).split(' ')
-    const command = args.shift().toLowerCase()
-
-    return { command, args: sanitizeArgs(args), fullArgs: args.join(' ') }
-}
-
-function sanitizeArgs(args) {
-    return args
-        .map(a =>
-            a
-                .normalize("NFKC")                // normaliza unicode
-                .replace(/[\u0300-\u036F]/g, "")
-                .trim()
-        )
-        .filter(a => a.length > 0)
-}
-
-start(commands, parseCommand)
+bot.onSub(({ broadcasterName, userName }) => {
+	bot.say(broadcasterName, `Valeu @${userName} pelo sub!`)
+})
+bot.onResub(({ broadcasterName, userName, months }) => {
+	bot.say(broadcasterName, `Valeu @${userName} por passar ${months} meses dando pro mautei!`)
+})
+bot.onSubGift(({ broadcasterName, gifterName, userName }) => {
+	bot.say(broadcasterName, `Valeu @${gifterName} por dar um sub para @${userName}!`)
+})

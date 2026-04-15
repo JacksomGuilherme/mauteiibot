@@ -1,3 +1,4 @@
+const axios = require('axios')
 const { sendMessage } = require('../utils/messages')
 
 module.exports = {
@@ -7,8 +8,8 @@ module.exports = {
     args: [],
     examples: ["!comandos"],
     docignore: false,
-    execute: async ({ client, channel, tags, args, fullArgs }) => {
+    execute: async (params, { userDisplayName ,say }) => {
         let urlComandos = "https://jacksomguilherme.github.io/mauteiibot/"
-        sendMessage(channel, `@${tags['display-name']} -> A lista dos meus comandos está aqui \n${urlComandos}`)
+        say(`@${userDisplayName} -> A lista dos meus comandos está aqui \n${urlComandos}`)
     }
 }
