@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { sendMessage } = require('../utils/messages')
-const { getValidAccessToken } = require('../authentication/twitchAuth.service')
+const { getValidAccessToken, getAuthProvider } = require('../authentication/twitchAuth.service')
 const { getBroadcasterId } = require('../utils/broadcast')
 
 function parseClipArgs(args) {
@@ -29,16 +29,15 @@ module.exports = {
     description: 'Cria clipes automaticamente, o comando aceita o tempo de duração (5s - 60s) e o nome do clipe',
     aliases: ['clipar', 'clipe'],
     args: [
-        {"name": "Duração", "examples": ["30s", "45s", "60s"], "required": false},
-        {"name": "Nome do Clipe", "examples": ["Dicção do mautei falhando"], "required": false},
+        { "name": "Duração", "examples": ["30s", "45s", "60s"], "required": false },
+        { "name": "Nome do Clipe", "examples": ["Dicção do mautei falhando"], "required": false },
     ],
     examples: ["!clipe 60s 1 minuto de jogadas insanas", "!clipe momento mais engraçado da live"],
     docignore: false,
-    execute: async ({ client, channel, tags, args, fullArgs }) => {
+    execute: async (params, { broadcasterId, userName, say }) => {
         const accessToken = await getValidAccessToken()
-        const broadcasterId = await getBroadcasterId(channel)
 
-        const { seconds, title } = parseClipArgs(args)
+        const { seconds, title } = parseClipArgs(params)
 
         let duration = seconds != null ? seconds : 30
 
@@ -58,16 +57,25 @@ module.exports = {
                     }
                 }
             )
+
             let clip = await response.data.data[0]
+            if (!clip?.id) {
+                say(channel, 'Não foi possível criar o clipe, tente novamente.')
+            }
 
             let url = `https://clips.twitch.tv/${clip.id}`
 
             let returnMessage = (title && title != '') ? `"${title}" ` : ""
 
-            sendMessage(channel, `Clipe ${returnMessage}criado:\n\n${url}`)
+            say(`Clipe ${returnMessage}criado:\n\n${url}`)
         } catch (error) {
-            if (error.status === 404) {
-                sendMessage(channel, `Não é possível clipar um canal offline`)
+            const status = error.response?.status
+
+            if (status === 404 || status === 422) {
+                say('Não é possível clipar um canal offline.')
+            } else {
+                console.error('Error during clip creation:', error.response?.data ?? error.message)
+                say('Erro ao criar o clipe.')
             }
         }
     }

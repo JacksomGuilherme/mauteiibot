@@ -6,14 +6,11 @@ const { getBroadcasterId } = require('../utils/broadcast')
 module.exports = {
     name: 'token',
     docignore: true,
-    execute: async ({ client, channel, tags, args, fullArgs }) => {
-        const broadcasterId = await getBroadcasterId(channel)
-        const usarTagId = parseInt(tags['user-id'])
-
-        if((tags.mod) || (usarTagId === broadcasterId)){
-            await exchangeCodeForToken(fullArgs)
+    execute: async (params, { broadcasterId, msg, say }) => {
+        if(msg.userInfo.isMod || msg.userInfo.isLeadMod || msg.userInfo.isBroadcaster){
+            await exchangeCodeForToken(params[0])
         }else{
-            sendMessage(channel, `@${tags.username} você não tem permissão para usar esse comando!`)
+            say(`@${tags.username} você não tem permissão para usar esse comando!`)
         }
     }
 }

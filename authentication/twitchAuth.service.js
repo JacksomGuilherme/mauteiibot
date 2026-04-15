@@ -1,56 +1,46 @@
-const axios = require('axios')
+const { RefreshingAuthProvider } = require('@twurple/auth')
 const authRepo = require('../repositories/auth.repository')
 
-async function refreshAccessToken(refreshToken) {
-    console.log('🔄 Refreshing Twitch token...')
+let authProvider = null
 
-    const response = await axios.post(
-        'https://id.twitch.tv/oauth2/token',
-        null,
-        {
-            params: {
-                grant_type: 'refresh_token',
-                refresh_token: refreshToken,
-                client_id: process.env.TWITCH_CLIENT_ID,
-                client_secret: process.env.TWITCH_CLIENT_SECRET
-            }
-        }
-    )
+async function getAuthProvider() {
+    if (authProvider) return authProvider
 
-    const data = response.data
-
-    const expiresAt = Date.now() + (data.expires_in * 1000)
-
-    authRepo.saveTokens(
-        data.access_token,
-        data.refresh_token,
-        expiresAt
-    )
-
-    console.log('✅ Token refreshed successfully')
-
-    return data.access_token
-}
-
-async function getValidAccessToken() {
     const tokens = authRepo.getTokens()
 
     if (!tokens) {
-        throw new Error('Bot ainda não foi autorizado pelo OAuth!')
+        throw new Error('Bot are not authorized from Twitch OAuth!')
     }
 
-    const now = Date.now()
-
-    const isExpired = now >= (tokens.expires_at - 60000)
-
-    if (!isExpired) {
-        return tokens.access_token
+    authProvider = new RefreshingAuthProvider({
+		clientId: process.env.TWITCH_CLIENT_ID,
+        clientSecret: process.env.TWITCH_CLIENT_SECRET,
     }
+    )
 
-    return await refreshAccessToken(tokens.refresh_token)
+    await authProvider.onRefresh((userId, newTokenData) => {
+        authRepo.saveTokens(newTokenData)
+        console.log('✅ Token refreshed successfully')
+    })
+
+    await authProvider.addUserForToken(
+        tokens,
+        ['chat', 'api']
+    )
+
+    return authProvider
+}
+
+
+async function getValidAccessToken() {
+    const provider = await getAuthProvider()
+    const token = await provider.getAccessTokenForUser(process.env.BOT_USER_ID)
+    return token.accessToken
 }
 
 async function exchangeCodeForToken(code) {
+    const axios = require('axios')
+
     const response = await axios.post(
         'https://id.twitch.tv/oauth2/token',
         null,
@@ -65,19 +55,21 @@ async function exchangeCodeForToken(code) {
         }
     )
 
-    const data = response.data
-    const expiresAt = Date.now() + (data.expires_in * 1000)
+    const tokenData = response.data
 
-    authRepo.saveTokens(
-        data.access_token,
-        data.refresh_token,
-        expiresAt
-    )
+    authRepo.saveTokens({
+        accessToken: tokenData.access_token,
+        refreshToken: tokenData.refresh_token,
+        expiresIn: tokenData.expires_in,
+        obtainmentTimestamp: Date.now()
+    })
+
+    authProvider = null
 
     console.log('✅ Tokens salvos no banco!')
 }
-
 module.exports = {
-    exchangeCodeForToken,
-    getValidAccessToken
+    getAuthProvider,
+    getValidAccessToken,
+    exchangeCodeForToken
 }

@@ -68,17 +68,16 @@ module.exports = {
     ],
     examples: ["!followage", "!followage @Mauteiibot"],
     docignore: false,
-    execute: async ({ client, channel, tags, args, fullArgs }) => {
-        const broadcasterId = await getBroadcasterId(channel)
-        const usarTagId = parseInt(tags['user-id'])
-        const accessToken = await getValidAccessToken()
-
-        if (args[0]) {
-            let username = args[0].replace('@', '').toLowerCase()
-            const user = await getUserByName(username)
-            if (parseInt(user.id) === broadcasterId) {
-                sendMessage(channel, `O @${user.display_name} é o streamer, ele não precisa se seguir`)
+    execute: async (params, { broadcasterName, broadcasterId, userId, userDisplayName, say }) => {
+        if (params[0]) {
+            let username = params[0].replace('@', '').toLowerCase()
+            if (username === broadcasterName) {
+                say(`O @${username} é o streamer, ele não precisa se seguir`)
             } else {
+                const accessToken = await getValidAccessToken()
+
+                const user = await getUserByName(username)
+
                 const res = await axios.get(
                     'https://api.twitch.tv/helix/channels/followers',
                     {
@@ -95,15 +94,17 @@ module.exports = {
 
                 const followerData = res.data.data[0]
                 if (!followerData) {
-                    sendMessage(channel, `@${user.display_name} ainda não segue o canal! bora seguir ai @${user.display_name} na humildade?`)
+                    say(`@${user.display_name} ainda não segue o canal! bora seguir ai @${user.display_name} na humildade?`)
                 } else {
-                    sendMessage(channel, `@${user.display_name} ${getFollowDuration(followerData.followed_at)}`)
+                    say(`@${user.display_name} ${getFollowDuration(followerData.followed_at)}`)
                 }
             }
         } else {
-            if (usarTagId === broadcasterId) {
-                sendMessage(channel, `@${tags.username} você é o streamer zé bunda`)
+            if (userId === broadcasterId) {
+                say(`@${userDisplayName} você é o streamer zé bunda`)
             } else {
+                const accessToken = await getValidAccessToken()
+
                 const res = await axios.get(
                     'https://api.twitch.tv/helix/channels/followers',
                     {
@@ -113,12 +114,12 @@ module.exports = {
                         },
                         params: {
                             broadcaster_id: broadcasterId,
-                            user_id: usarTagId
+                            user_id: userId
                         }
                     }
                 )
                 const followerData = res.data.data[0]
-                sendMessage(channel, `@${tags['display-name']} ${getFollowDuration(followerData.followed_at)}`)
+                say(`@${userDisplayName} ${getFollowDuration(followerData.followed_at)}`)
             }
         }
 
