@@ -28,18 +28,18 @@ bot.onResub(({ broadcasterName, userName, months }) => {
 
 const giftCounts = new Map()
 
-bot.onCommunitySub((channel, gifterName, giftInfo) => {
-	const previousGiftCount = giftCounts.get(gifterName) ?? 0
-	giftCounts.set(gifterName, previousGiftCount + giftInfo.count)
-	bot.say(channel, `Valeu ${gifterName} por dropar ${giftInfo.count} subs pro chat!`)
-})
+// bot.onCommunitySub((channel, gifterName, giftInfo) => {
+// 	const previousGiftCount = giftCounts.get(gifterName) ?? 0
+// 	giftCounts.set(gifterName, previousGiftCount + giftInfo.count)
+// 	bot.say(channel, `Valeu ${gifterName} por dropar ${giftInfo.count} subs pro chat!`)
+// })
 
-bot.onSubGift((channel, recipientName, subInfo) => {
-	const gifterName = subInfo.gifter
-	const previousGiftCount = giftCounts.get(gifterName) ?? 0
-	if (previousGiftCount > 0) {
-		giftCounts.set(gifterName, previousGiftCount - 1)
-	} else {
-		bot.say(channel, `Valeu ${gifterName} por dar um sub para ${recipientName}!`)
-	}
-})
+// bot.onSubGift((channel, recipientName, subInfo) => {
+// 	const gifterName = subInfo.gifter
+// 	const previousGiftCount = giftCounts.get(gifterName) ?? 0
+// 	if (previousGiftCount > 0) {
+// 		giftCounts.set(gifterName, previousGiftCount - 1)
+// 	} else {
+// 		bot.say(channel, `Valeu ${gifterName} por dar um sub para ${recipientName}!`)
+// 	}
+// })
